@@ -1,3 +1,6 @@
+<script src="./MainLayout.js"></script>
+<style src="./MainLayout.sass" lang="sass"></style>
+
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header
@@ -59,28 +62,3 @@
     </q-page-container>
   </q-layout>
 </template>
-
-<script>
-export default {
-  name: 'MainLayout',
-  data () {
-    return {
-
-    }
-  }
-}
-</script>
-
-<style lang="sass">
-  .q-toolbar
-    @media (min-width: $breakpoint-sm-min)
-      line-height: 77px
-  .q-toolbar__title
-    font-size: 30px
-    text-align: center
-    @media (min-width: $breakpoint-sm-min)
-      text-align: left
-  .q-footer
-    .q-tab__icon
-      font-size: 30px
-</style>

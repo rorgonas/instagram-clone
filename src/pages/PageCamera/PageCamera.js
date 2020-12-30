@@ -1,76 +1,3 @@
-<template>
-  <q-page class="constrain-more q-pa-md">
-    <div class="camera-frame q-pa-md">
-      <video
-        v-show="!imageCaptured"
-        ref="video"
-        class="full-width"
-        autoplay
-      />
-      <canvas
-        v-show="imageCaptured"
-        ref="canvas"
-        class="full-width"
-        height="240"
-      ></canvas>
-    </div>
-    <div class="text-center q-pa-md">
-      <q-btn
-        v-if="hasCameraSupport"
-        color="grey-10"
-        icon="eva-camera"
-        size="lg"
-        round
-        @click="captureImage"
-      />
-      <q-file
-        v-else
-        outlined
-        @input="captureImageFallback"
-        v-model="imageUpload"
-        accept="image/*"
-        label="Choose an image"
-      >
-        <template v-slot:prepend>
-          <q-icon name="eva-attach-outline" />
-        </template>
-      </q-file>
-      <div class="row justify-center q-ma-md">
-        <q-input
-          v-model="post.caption"
-          class="col col-sm-6"
-          label="Caption"
-          dense
-        />
-      </div>
-      <div class="row justify-center q-ma-md">
-        <q-input
-          :loading="locationLoading"
-          v-model="post.location"
-          class="col col-sm-6"
-          label="Location"
-          dense
-        >
-          <template v-slot:append>
-            <q-btn
-              v-if="!locationLoading && locationSupported"
-              round
-              dense
-              flat
-              icon="eva-navigation-2-outline"
-              @click="getLocation"
-            />
-          </template>
-        </q-input>
-      </div>
-      <div class="row justify-center q-mt-lg">
-        <q-btn unelevated rounded color="primary" label="Post Image" />
-      </div>
-    </div>
-  </q-page>
-</template>
-
-<script>
 import { uid } from 'quasar'
 import { Dialog } from 'quasar'
 require('md-gum-polyfill')
@@ -111,6 +38,10 @@ export default {
       }
     },
     captureImage() {
+      if (this.imageCaptured) {
+        this.enableCamera()
+        return
+      }
       let video = this.$refs.video
       let canvas = this.$refs.canvas
       canvas.width = video.getBoundingClientRect().width
@@ -168,6 +99,12 @@ export default {
         track.stop()
       })
     },
+    enableCamera() {
+      this.$refs.video.srcObject.getVideoTracks().forEach(track => {
+        this.initCamera()
+        this.imageCaptured = false
+      })
+    },
     getLocation() {
       this.locationLoading = true
       navigator.geolocation.getCurrentPosition(position => {
@@ -209,10 +146,3 @@ export default {
     }
   }
 }
-</script>
-
-<style lang="sass">
-  .camera-frame
-    border: 1px solid $grey-10
-    border-radius: 10px
-</style>
