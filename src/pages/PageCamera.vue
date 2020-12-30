@@ -1,9 +1,11 @@
 <template>
   <q-page class="constrain-more q-pa-md">
     <div class="camera-frame q-pa-md">
-      <q-img
+      <video
+        ref="video"
         class="full-width"
-        src="https://cdn.quasar.dev/img/mountains.jpg"/>
+        autoplay
+      />
     </div>
     <div class="text-center q-pa-md">
       <q-btn
@@ -41,6 +43,7 @@
 
 <script>
 import { uid } from 'quasar'
+require('md-gum-polyfill')
 
 export default {
   name: 'PageCamera',
@@ -54,6 +57,23 @@ export default {
         date: Date.now()
       }
     }
+  },
+  methods: {
+    async initCamera() {
+      let stream = null;
+      const constraints = {
+        video: { width: 1280, height: 720 }
+      }
+      try {
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+        this.$refs.video.srcObject = stream
+      } catch(err) {
+        /* handle the error */
+      }
+    }
+  },
+  mounted() {
+    this.initCamera()
   }
 }
 </script>
