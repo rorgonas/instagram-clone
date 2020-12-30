@@ -1,6 +1,5 @@
 <template>
   <q-page class="constrain q-pa-md">
-
     <div class="row q-col-gutter-lg">
       <div class="col-12 col-sm-8">
         <q-card
