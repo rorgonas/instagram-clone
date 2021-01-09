@@ -1,51 +1,29 @@
 import { date } from 'quasar'
+import { Dialog } from 'quasar'
 
 export default {
   name: 'PageHome',
   data() {
     return {
-      posts: [
-        {
-          id: 1,
-          caption: 'Our Changing Planet',
-          date: Date.now(),
-          location: 'Montreal, Canada',
-          imageUrl: 'https://cdn.quasar.dev/img/mountains.jpg'
-        },
-        {
-          id: 2,
-          caption: 'Parallax Image 2',
-          date: Date.now(),
-          location: 'San Francisco, USA',
-          imageUrl: 'https://cdn.quasar.dev/img/parallax2.jpg'
-        },
-        {
-          id: 3,
-          caption: 'Parallax Image 1',
-          date: Date.now(),
-          location: 'San Francisco, USA',
-          imageUrl: 'https://cdn.quasar.dev/img/parallax1.jpg'
-        },
-        {
-          id: 4,
-          caption: 'Rocky Mountains',
-          date: Date.now(),
-          location: 'Alberta, Canada',
-          imageUrl: 'https://cdn.quasar.dev/img/mountains.jpg'
-        }
-      ]
+      posts: [],
+      loadingPosts: false,
     }
   },
   methods: {
     getPosts() {
+      this.loadingPosts = true
       this.$axios.get('http://localhost:3000/posts')
         .then(response => {
           this.posts = response.data
+          this.loadingPosts = false
         })
         .catch(err => {
-          console.log('err: ', err)
+          this.$q.dialog({
+            title: 'Error',
+            message: 'Could not download posts'
+          })
+          this.loadingPosts = false
         })
-      console.log('posts: ', posts)
     }
   },
   filters: {
