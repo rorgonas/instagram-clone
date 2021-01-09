@@ -36,9 +36,24 @@ export default {
       ]
     }
   },
+  methods: {
+    getPosts() {
+      this.$axios.get('http://localhost:3000/posts')
+        .then(response => {
+          this.posts = response.data
+        })
+        .catch(err => {
+          console.log('err: ', err)
+        })
+      console.log('posts: ', posts)
+    }
+  },
   filters: {
     niceDate(value) {
       return date.formatDate(value, 'MMMM D h:mmA')
     }
+  },
+  created() {
+    this.getPosts()
   }
 }
