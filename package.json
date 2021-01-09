@@ -6,7 +6,8 @@
   "author": "Rolland Orgonas <rorgonas@gmail.com>",
   "private": true,
   "scripts": {
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "dev":  "quasar dev"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",

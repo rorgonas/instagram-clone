@@ -40,6 +40,7 @@ export default {
     captureImage() {
       if (this.imageCaptured) {
         this.enableCamera()
+        this.imageCaptured = false
         return
       }
       let video = this.$refs.video
@@ -102,7 +103,6 @@ export default {
     enableCamera() {
       this.$refs.video.srcObject.getVideoTracks().forEach(track => {
         this.initCamera()
-        this.imageCaptured = false
       })
     },
     getLocation() {
