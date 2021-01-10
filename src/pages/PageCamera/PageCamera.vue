@@ -42,7 +42,7 @@
         <q-input
           v-model="post.caption"
           class="col col-sm-6"
-          label="Caption"
+          label="Caption *"
           dense
         />
       </div>
@@ -67,7 +67,13 @@
         </q-input>
       </div>
       <div class="row justify-center q-mt-lg">
-        <q-btn unelevated rounded color="primary" label="Post Image" />
+        <q-btn
+          unelevated
+          rounded
+          color="primary"
+          label="Post Image"
+          @click="addPost"
+          :disable="!post.caption || !post.photo"/>
       </div>
     </div>
   </q-page>

@@ -1,5 +1,4 @@
 import { uid } from 'quasar'
-import { Dialog } from 'quasar'
 require('md-gum-polyfill')
 
 export default {
@@ -113,7 +112,7 @@ export default {
         this.locationError(err)
       }, { timeout: 7000 })
     },
-    getCityAndCountry(position){
+    getCityAndCountry(position) {
       const { latitude, longitude } = position.coords
       const apiUrl = `https://geocode.xyz/${ latitude },${ longitude }?json=1`
       this.$axios.get(apiUrl).then(result => {
@@ -135,6 +134,36 @@ export default {
         message: 'Could not find your location'
       })
       this.locationLoading = false
+    },
+    addPost() {
+      this.$q.loading.show()
+
+      //send post via form data
+      let formData = new FormData()
+      formData.append('id', this.post.id)
+      formData.append('caption', this.post.caption)
+      formData.append('location', this.post.location)
+      formData.append('date', this.post.date)
+      formData.append('file', this.post.photo, this.post.id + '.png')
+
+      this.$axios.post(`${process.env.API}/createPost`, formData)
+        .then(response => {
+          this.$router.push('/');
+          this.$q.notify({
+            message: 'Post created!',
+            actions: [
+              { label: 'Dismiss', color: 'white' }
+            ]
+          })
+          this.$q.loading.hide()
+        })
+        .catch(err => {
+          this.$q.dialog({
+            title: 'Error',
+            message: 'Sorry, could not create post'
+          })
+          this.$q.loading.hide()
+        })
     }
   },
   mounted() {

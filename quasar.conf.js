@@ -6,7 +6,10 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
 
-module.exports = function (/* ctx */) {
+let API_DEV = "http://localhost:3000",
+    API_PROD = "https://quasagram-clone-backend.herokuapp.com"
+
+module.exports = function (ctx) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
@@ -43,6 +46,9 @@ module.exports = function (/* ctx */) {
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
+      env: {
+        API: ctx.dev ? API_DEV : API_PROD
+      },
       vueRouterMode: 'history', // available values: 'hash', 'history'
 
       // transpile: false,
@@ -92,7 +98,7 @@ module.exports = function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Dialog']
+      plugins: ['Dialog', 'Notify', 'Loading']
     },
 
     // animations: 'all', // --- includes all animations
