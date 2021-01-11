@@ -7,8 +7,10 @@
 /*
  * Dependencies
  *  */
-import { precacheAndRoute } from 'workbox-precaching';
 
+  import { precacheAndRoute } from 'workbox-precaching';
+  import { registerRoute } from 'workbox-routing';
+  import { StaleWhileRevalidate } from 'workbox-strategies';
 
 /*
 * Config
@@ -16,3 +18,13 @@ import { precacheAndRoute } from 'workbox-precaching';
 
 // Use with precache injection
 precacheAndRoute(self.__WB_MANIFEST);
+
+
+/*
+* Caching strategies
+* */
+
+registerRoute(
+  ({url}) => url.href.startsWith('http'),
+  new StaleWhileRevalidate()
+);
