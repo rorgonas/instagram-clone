@@ -14,6 +14,7 @@
   import { CacheFirst } from 'workbox-strategies';
   import { ExpirationPlugin } from 'workbox-expiration';
   import { CacheableResponsePlugin } from 'workbox-cacheable-response';
+  import { NetworkFirst } from 'workbox-strategies';
 
 /*
 * Config
@@ -41,6 +42,11 @@ registerRoute(
       })
     ],
   })
+);
+
+registerRoute(
+  ({ url }) => url.pathname.startsWith('/posts'),
+  new NetworkFirst()
 );
 
 registerRoute(
