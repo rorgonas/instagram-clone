@@ -158,7 +158,6 @@ export default {
               { label: 'Dismiss', color: 'white' }
             ]
           })
-          this.$q.loading.hide()
         })
         .catch(err => {
           if (!navigator.onLine && this.backgroundSyncSupported) {
@@ -170,6 +169,7 @@ export default {
               message: 'Sorry, could not create post'
             })
           }
+        }).finally(() => {
           this.$q.loading.hide()
         })
     }

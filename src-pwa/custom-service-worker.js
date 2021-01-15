@@ -15,8 +15,7 @@
   import { ExpirationPlugin } from 'workbox-expiration';
   import { CacheableResponsePlugin } from 'workbox-cacheable-response';
   import { NetworkFirst } from 'workbox-strategies';
-  import {Queue} from 'workbox-background-sync';
-
+  import { Queue } from 'workbox-background-sync';
 
 /*
 * Config
@@ -24,6 +23,10 @@
 
 // Use with precache injection
 precacheAndRoute(self.__WB_MANIFEST);
+
+// Disable Workbox message
+self.__WB_DISABLE_DEV_LOGS = true;
+
 
 /*
 * Check if Background sync is natively supported
