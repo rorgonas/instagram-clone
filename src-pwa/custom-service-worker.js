@@ -15,6 +15,8 @@
   import { ExpirationPlugin } from 'workbox-expiration';
   import { CacheableResponsePlugin } from 'workbox-cacheable-response';
   import { NetworkFirst } from 'workbox-strategies';
+  import {Queue} from 'workbox-background-sync';
+
 
 /*
 * Config
@@ -22,6 +24,21 @@
 
 // Use with precache injection
 precacheAndRoute(self.__WB_MANIFEST);
+
+/*
+* Check if Background sync is natively supported
+* */
+
+let isBackgroundSyncSupported = 'sync' in self.registration
+
+/*
+* Queue cretePost
+* */
+
+let createPostQueue = null;
+if (isBackgroundSyncSupported) {
+  createPostQueue = new Queue('createPostQueue');
+}
 
 
 /*
@@ -53,3 +70,20 @@ registerRoute(
   ({ url }) => url.href.startsWith('http'),
   new StaleWhileRevalidate()
 );
+
+
+  /*
+  * Events - fetch
+  * */
+
+  if (isBackgroundSyncSupported) {
+    self.addEventListener('fetch', (event) => {
+      if (event.request.url.endsWith('/createPost')) {
+        const promiseChain = fetch(event.request.clone()).catch((err) => {
+          return createPostQueue.pushRequest({request: event.request});
+        });
+
+        event.waitUntil(promiseChain);
+      }
+    });
+  }
