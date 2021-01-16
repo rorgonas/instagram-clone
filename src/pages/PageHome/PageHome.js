@@ -31,20 +31,16 @@ export default {
     getOnlinePosts() {
       let db = openDB('workbox-background-sync').then(db => {
         db.getAll('requests').then(failedRequests => {
-          console.log('failedRequests ', failedRequests)
           failedRequests.forEach(failedRequest => {
-            console.log('each request ', failedRequest)
             if (failedRequest.queueName === 'createPostQueue') {
-              console.log('found createPostQueue')
               let request = new Request(failedRequest.requestData.url, failedRequest.requestData)
               request.formData().then(formData => {
-                console.log('formData ', formData)
                 let offlinePost = {}
+
                 offlinePost.id = formData.get('id')
                 offlinePost.caption = formData.get('caption')
                 offlinePost.location = formData.get('location')
                 offlinePost.date = failedRequest.timestamp
-                console.log('timestamp ', date)
                 offlinePost.offline = true
 
                 let reader = new FileReader()
@@ -52,7 +48,6 @@ export default {
 
                 reader.readAsDataURL(file)
                 reader.onloadend = () => {
-                  console.log('onloadend ', reader.result)
                   offlinePost.imageUrl = reader.result
                   this.posts.unshift(offlinePost)
                 }
