@@ -47,6 +47,8 @@ if (isBackgroundSyncSupported) {
         try {
           await fetch(entry.request);
           console.log('Replay successful for request', entry.request);
+          const channel = new BroadcastChannel('sw-messages');
+          channel.postMessage({ msg: 'offline-post-uploaded'});
         } catch (error) {
           console.error('Replay failed for request', entry.request, error);
 

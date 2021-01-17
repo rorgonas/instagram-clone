@@ -9,6 +9,11 @@ export default {
       loadingPosts: false,
     }
   },
+  computed: {
+    serviceWorkerSupported() {
+      return 'serviceWorker' in navigator
+    }
+  },
   methods: {
     getPosts() {
       this.loadingPosts = true
@@ -58,6 +63,12 @@ export default {
           console.log('Error accessing IndexedDB ', err)
         })
       })
+    },
+    listenForOfflinePostUploaded() {
+      const channel = new BroadcastChannel('sw-messages');
+      channel.addEventListener('message', event => {
+        console.log('Received', event.data);
+      });
     }
   },
   filters: {
@@ -67,5 +78,8 @@ export default {
   },
   created() {
     this.getPosts()
+    if (this.serviceWorkerSupported) {
+      this.listenForOfflinePostUploaded()
+    }
   }
 }
