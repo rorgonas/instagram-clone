@@ -76,8 +76,11 @@ export default {
       return date.formatDate(value, 'MMMM D h:mmA')
     }
   },
-  created() {
+  // Called after our kept-alive component is activated.
+  activated() {
     this.getPosts()
+  },
+  created() {
     if (this.serviceWorkerSupported) {
       this.listenForOfflinePostUploaded()
     }
