@@ -40,7 +40,7 @@ export default {
                 offlinePost.id = formData.get('id')
                 offlinePost.caption = formData.get('caption')
                 offlinePost.location = formData.get('location')
-                offlinePost.date = failedRequest.timestamp
+                offlinePost.date = parseInt(formData.get('date'), 10)
                 offlinePost.offline = true
 
                 let reader = new FileReader()

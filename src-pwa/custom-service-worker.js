@@ -24,8 +24,8 @@
 // Use with precache injection
 precacheAndRoute(self.__WB_MANIFEST);
 
-// Disable Workbox message
-self.__WB_DISABLE_DEV_LOGS = true;
+// Disable Workbox message in PROD
+self.__WB_DISABLE_DEV_LOGS = process.env.NODE_ENV === 'production';
 
 
 /*
@@ -40,7 +40,24 @@ let isBackgroundSyncSupported = 'sync' in self.registration
 
 let createPostQueue = null;
 if (isBackgroundSyncSupported) {
-  createPostQueue = new Queue('createPostQueue');
+  createPostQueue = new Queue('createPostQueue', {
+    onSync: async ({ queue }) => {
+      let entry;
+      while (entry = await queue.shiftRequest()) {
+        try {
+          await fetch(entry.request);
+          console.log('Replay successful for request', entry.request);
+        } catch (error) {
+          console.error('Replay failed for request', entry.request, error);
+
+          // Put the entry back in the queue and re-throw the error:
+          await queue.unshiftRequest(entry);
+          throw error;
+        }
+      }
+      console.log('Replay complete!');
+    }
+  });
 }
 
 

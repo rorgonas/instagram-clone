@@ -10,9 +10,17 @@
             v-for="post in posts"
             :key="post.id"
             class="card-post q-mb-md"
+            :class="{'bg-red-1': post.offline}"
             flat
             bordered
           >
+            <q-badge
+              v-if="post.offline"
+              color="red"
+              class="badge-offline absolute-top-right"
+            >
+              Stored Offline
+            </q-badge>
             <q-item>
               <q-item-section avatar>
                 <q-avatar>
