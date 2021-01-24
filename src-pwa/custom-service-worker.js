@@ -25,7 +25,7 @@
 precacheAndRoute(self.__WB_MANIFEST);
 
 // Disable Workbox message in PROD
-self.__WB_DISABLE_DEV_LOGS = process.env.NODE_ENV === 'production';
+self.__WB_DISABLE_DEV_LOGS = true; //process.env.NODE_ENV === 'production';
 
 
 /*

@@ -1,5 +1,5 @@
-<script src="./PageHome.js"></script>
-<style src="./PageHome.sass" lang="sass"></style>
+<script src="./page-home.js"></script>
+<style src="./page-home.sass" lang="sass"></style>
 
 <template>
   <q-page class="constrain q-pa-md">

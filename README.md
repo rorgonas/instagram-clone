@@ -20,3 +20,7 @@ quasar build
 
 ### Customize the configuration
 See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
+
+### List installed apps in your browser
+chrome://apps/
+

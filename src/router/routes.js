@@ -2,10 +2,10 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout'),
+    component: () => import('layouts/main-layout'),
     children: [
-      { path: '', component: () => import('pages/PageHome') },
-      { path: '/camera', component: () => import('pages/PageCamera') }
+      { path: '', component: () => import('pages/page-home') },
+      { path: '/camera', component: () => import('pages/page-camera') }
     ]
   },
 
@@ -13,7 +13,7 @@ const routes = [
   // but you can also remove it
   {
     path: '*',
-    component: () => import('pages/Error404.vue')
+    component: () => import('pages/error-page/404.vue')
   }
 ]
 

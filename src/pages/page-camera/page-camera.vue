@@ -1,5 +1,5 @@
-<script src="./PageCamera.js"></script>
-<style lang="sass" src="./PageCamera.sass"></style>
+<script src="./page-camera.js"></script>
+<style lang="sass" src="./page-camera.sass"></style>
 
 <template>
   <q-page class="constrain-more q-pa-md">
