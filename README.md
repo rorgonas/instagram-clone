@@ -24,3 +24,6 @@ See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
 ### List installed apps in your browser
 chrome://apps/
 
+### Enable native notification on browser
+chrome://flags -> set "Enable native notifications" to disabled
+
