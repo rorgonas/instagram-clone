@@ -4,10 +4,24 @@ export default {
   name: 'InstallBanner',
   data () {
     return {
-      showAppInstall: false
+      showBanner: false
     }
   },
   methods: {
+    initBanner() {
+      let neverShowAppInstallBanner = this.$q.localStorage.getItem('neverShowAppInstallBanner')
+
+      if (!neverShowAppInstallBanner) {
+        window.addEventListener('beforeinstallprompt', (e) => {
+          // Prevent showing the prompt
+          e.preventDefault();
+          // Stash the event so it can be triggered later.
+          deferredPrompt = e;
+          // Update UI notify the user they can install the PWA
+          this.showAppInstallBanner();
+        });
+      }
+    },
     installApp() {
       // Hide the app provided install promotion
       if (deferredPrompt) {
@@ -30,26 +44,15 @@ export default {
     },
     showAppInstallBanner() {
       setTimeout(() => {
-        this.showAppInstall = true
+        this.showBanner = true
       }, 3000)
     },
     neverShowAppInstallBanner() {
-      this.showAppInstall = false;
+      this.showBanner = false;
       this.$q.localStorage.set('neverShowAppInstallBanner', true)
     }
   },
   mounted() {
-    let neverShowAppInstallBanner = this.$q.localStorage.getItem('neverShowAppInstallBanner')
-
-    if (!neverShowAppInstallBanner) {
-      window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent showing the prompt
-        e.preventDefault();
-        // Stash the event so it can be triggered later.
-        deferredPrompt = e;
-        // Update UI notify the user they can install the PWA
-        this.showAppInstallBanner();
-      });
-    }
+    this.initBanner();
   }
 }

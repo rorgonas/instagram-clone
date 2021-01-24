@@ -41,14 +41,7 @@
       bordered
       class="bg-white"
     >
-      <transition
-        appear
-        enter-active-class="animated fadeIn"
-        leave-active-class="animated fadeOut"
-      >
-        <install-banner/>
-      </transition>
-
+      <install-banner/>
       <tab-navigation/>
     </q-footer>
 

@@ -3,6 +3,7 @@
 
 <template>
   <q-page class="constrain q-pa-md">
+    <notification-banner/>
     <div class="row q-col-gutter-lg">
       <div class="col-12 col-sm-8">
         <template v-if="!loadingPosts && posts.length">

@@ -1,5 +1,5 @@
-<script src="./install-banner.js"></script>
-<style src="./install-banner.sass" lang="sass"></style>
+<script src="./notification-banner.js"></script>
+<style src="./notification-banner.sass" lang="sass"></style>
 
 <template>
   <transition
@@ -7,27 +7,18 @@
     enter-active-class="animated fadeIn"
     leave-active-class="animated fadeOut"
   >
-    <div v-if="showBanner" class="banner-container bg-orange">
+    <div v-if="showBanner && pushNotificationSupported" class="banner-container bg-primary">
     <div class="constrain">
-      <q-banner
-        inline-actions
-        dense
-        class="bg-orange text-white"
-      >
+      <q-banner class="bg-purple-8 text-white q-mb-md">
         <template v-slot:avatar>
-          <q-avatar
-            color="white"
-            text-color="grey-10"
-            icon="eva-camera-outline"
-            font-size="22px"
-          />
+          <q-icon name="eva-bell-outline" />
         </template>
 
-        <b>Install App?</b>
+        <b>Would you like to enable notifications?</b>
 
         <template v-slot:action>
           <q-btn
-            @click="installApp"
+            @click="enableNotifications"
             flat
             dense
             label="Yes"
@@ -41,7 +32,7 @@
             class="q-px-sm"
           />
           <q-btn
-            @click="neverShowAppInstallBanner"
+            @click="neverShowNotificationsBanner"
             flat
             dense
             label="Never"

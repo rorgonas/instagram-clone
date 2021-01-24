@@ -1,8 +1,12 @@
 import { date } from 'quasar'
 import { openDB } from 'idb'
+import { NotificationBanner } from './../../components';
 
 export default {
   name: 'PageHome',
+  components: {
+    NotificationBanner
+  },
   data() {
     return {
       posts: [],
