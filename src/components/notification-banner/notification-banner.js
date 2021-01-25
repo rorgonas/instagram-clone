@@ -34,7 +34,7 @@ export default {
       }
     },
     displayGrantedNotification() {
-      const notification = {
+      let notification = {
         msg: 'You are subscribed to notification!',
         options: {
           body: 'Thanks for subscribing',
@@ -57,7 +57,20 @@ export default {
         // create bridge between UI and SW
         navigator.serviceWorker.ready
           .then(swreg => {
-            swreg.showNotification(notification.msg, notification.options)
+            // Extend options with custom actions
+            const actions = [
+              {
+                action: 'hello',
+                title: 'Hello',
+                icon: 'icons/icon-128x128.png'
+              },
+              {
+                action: 'goodbye',
+                title: 'Goodbye',
+                icon: 'icons/icon-128x128.png'
+              }
+            ]
+            swreg.showNotification(notification.msg, { ...notification.options, actions })
           })
       }
     },
