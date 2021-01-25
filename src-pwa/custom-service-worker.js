@@ -144,7 +144,20 @@ self.addEventListener('notificationclick', (event) => {
   } else if (action === 'goodbye') {
     console.log('Goodbye button was clicked')
   } else {
-    console.log('Main notification was clicked')
+    event.waitUntil(
+      clients.matchAll().then((clientList) => {
+        let clientUsingApp = clientList.find(client => {
+          return client.visibilityState === 'visible'
+        })
+
+        if (clientUsingApp) {
+          clientUsingApp.navigate('/#/')
+          clientUsingApp.focus()
+        } else {
+          clients.openWindow('/#/')
+        }
+      })
+    )
   }
   notification.close()
 });
