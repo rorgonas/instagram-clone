@@ -123,7 +123,10 @@ self.addEventListener('push', event => {
         data.title,
         {
           body: data.body,
-          icon: 'icons/icon-128x128.png'
+          icon: 'icons/icon-128x128.png',
+          data: {
+            openUrl: data.openUrl
+          }
         }
       )
     )
@@ -138,6 +141,7 @@ self.addEventListener('push', event => {
 self.addEventListener('notificationclick', (event) => {
   let notification = event.notification
   let action = event.action
+  let openUrl = notification.data.openUrl
 
   if (action === 'hello') {
     console.log('Hello button was clicked')
@@ -151,10 +155,10 @@ self.addEventListener('notificationclick', (event) => {
         })
 
         if (clientUsingApp) {
-          clientUsingApp.navigate('/#/')
+          clientUsingApp.navigate(openUrl)
           clientUsingApp.focus()
         } else {
-          clients.openWindow('/#/')
+          clients.openWindow(openUrl)
         }
       })
     )
