@@ -100,7 +100,7 @@ registerRoute(
 
   if (isBackgroundSyncSupported) {
     self.addEventListener('fetch', (event) => {
-      if (event.request.url.endsWith('/createPost')) {
+      if (event.request.url.endsWith('/createPost') && !self.navigator.onLine) {
         const promiseChain = fetch(event.request.clone()).catch((err) => {
           return createPostQueue.pushRequest({request: event.request});
         });
@@ -109,6 +109,26 @@ registerRoute(
       }
     });
   }
+
+/*
+* Events - push
+* */
+
+self.addEventListener('push', event => {
+  console.log('Push message received:', event)
+  if (event.data) {
+    let data = JSON.parse(event.data.text())
+    event.waitUntil(
+      self.registration.showNotification(
+        data.title,
+        {
+          body: data.body,
+          icon: 'icons/icon-128x128.png'
+        }
+      )
+    )
+  }
+})
 
 /*
 * Events - notifications

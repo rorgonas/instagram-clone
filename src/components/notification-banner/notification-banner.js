@@ -1,3 +1,5 @@
+import * as qs from "qs";
+
 let deferredPrompt;
 
 export default {
@@ -28,8 +30,6 @@ export default {
         Notification.requestPermission(result => {
           this.neverShowNotificationsBanner()
           if (result === 'granted') {
-            // this.displayGrantedNotification()
-
             // Check if User has PushSubscription
             this.checkForExistingPushSubscription()
           }
@@ -61,7 +61,14 @@ export default {
         userVisibleOnly: true,
         applicationServerKey: convertedVapidKey
       }).then(newSub => {
-        console.log('newSub ', newSub)
+        let newSubData = newSub.toJSON(),
+            newSubDataQS = qs.stringify(newSubData)
+        return this.$axios.post(`${process.env.API}/createSubscription?${newSubDataQS}`)
+      }).then(response => {
+        console.log('Create subscription response ',response)
+        this.displayGrantedNotification()
+      }).catch(err => {
+        console.log('Create subscription err ',err)
       })
     },
     displayGrantedNotification() {
