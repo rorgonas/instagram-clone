@@ -28,10 +28,41 @@ export default {
         Notification.requestPermission(result => {
           this.neverShowNotificationsBanner()
           if (result === 'granted') {
-            this.displayGrantedNotification()
+            // this.displayGrantedNotification()
+
+            // Check if User has PushSubscription
+            this.checkForExistingPushSubscription()
           }
         })
       }
+    },
+    checkForExistingPushSubscription() {
+      if (this.serviceWorkerSupported && this.pushNotificationSupported) {
+        let registration = null
+        navigator.serviceWorker.ready
+          .then(swreg => {
+            registration = swreg
+            return swreg.pushManager.getSubscription()
+          })
+          .then(sub => {
+            if(!sub) {
+              // console.log('Create a new Push Subscription')
+              this.createPushSubscription(registration)
+            }
+          })
+      }
+    },
+    createPushSubscription(registration) {
+      // Need to secure push subscription by combining a user private & public key
+      const vapidPublicKey  = 'BCAthoxIluJm5zIIesn5uyT2m9q_hs9Mb_AGiaC6eQENHfSVYBKQunDwztFggdUPpscWW3HzCZBuWUn2JOmngMI'
+      const convertedVapidKey = this.urlBase64ToUint8Array(vapidPublicKey);
+
+      registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: convertedVapidKey
+      }).then(newSub => {
+        console.log('newSub ', newSub)
+      })
     },
     displayGrantedNotification() {
       let notification = {
@@ -82,6 +113,21 @@ export default {
     neverShowNotificationsBanner() {
       this.showBanner = false;
       this.$q.localStorage.set('neverShowNotificationsBanner', true)
+    },
+    // Convert the URL safe base64 string to a Uint8Array to pass into the subscribe call
+    urlBase64ToUint8Array(base64String) {
+      const padding = '='.repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding)
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+
+      const rawData = window.atob(base64);
+      const outputArray = new Uint8Array(rawData.length);
+
+      for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+      }
+      return outputArray;
     }
   },
   mounted() {
