@@ -10,6 +10,9 @@ export default {
   computed: {
     pushNotificationSupported() {
       return 'PushManager' in window
+    },
+    serviceWorkerSupported() {
+      return 'serviceWorker' in navigator
     }
   },
   methods: {
@@ -31,17 +34,32 @@ export default {
       }
     },
     displayGrantedNotification() {
-      new Notification('You are subscribed to notification!', {
-        body: 'Thanks for subscribing',
-        icon: 'icons/icon-128x128.png',
-        image: 'icons/icon-128x128.png',
-        badge: 'icons/icon-128x128.png',
-        dir: 'ltr',
-        lang: 'en-US',
-        vibrate: '[100, 50, 200]',
-        tag: 'confirm-notification',
-        renotify: true
-      })
+      const notification = {
+        msg: 'You are subscribed to notification!',
+        options: {
+          body: 'Thanks for subscribing',
+          icon: 'icons/icon-128x128.png',
+          image: 'icons/icon-128x128.png',
+          badge: 'icons/icon-128x128.png',
+          dir: 'ltr',
+          lang: 'en-US',
+          vibrate: '[100, 50, 200]',
+          tag: 'confirm-notification',
+          renotify: true
+        }
+      }
+
+      // Disable notification display from the browser. It remains just an alternative.
+      // new Notification(notification.msg, notification.options)
+
+      // Enable notification display from the service worker
+      if (this.serviceWorkerSupported && this.pushNotificationSupported) {
+        // create bridge between UI and SW
+        navigator.serviceWorker.ready
+          .then(swreg => {
+            swreg.showNotification(notification.msg, notification.options)
+          })
+      }
     },
     showNotificationsBanner() {
       setTimeout(() => {
