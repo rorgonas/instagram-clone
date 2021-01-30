@@ -132,9 +132,13 @@ export default {
       this.locationLoading = false
     },
     locationError(err) {
+      let errorMessage = 'Could not find your location';
+      if (this.$q.platform.is.mac) {
+        errorMessage += 'You might be able to fix this in System Preferences > Security & Privacy > Location Services';
+      }
       this.$q.dialog({
         title: 'Error',
-        message: 'Could not find your location'
+        message: errorMessage
       })
       this.locationLoading = false
     },
