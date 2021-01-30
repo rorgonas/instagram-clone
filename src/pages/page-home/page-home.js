@@ -21,7 +21,13 @@ export default {
   methods: {
     getPosts() {
       this.loadingPosts = true
-      this.$axios.get(`${process.env.API}/posts`)
+
+      // add a unique timestamp to the request url for IE so requests dont get cached
+      let timestamp = ''
+      if (this.$q.platform.is.ie) {
+        timestamp = '?timestamp=' + Date.now()
+      }
+      this.$axios.get(`${process.env.API}/posts${timestamp}`)
         .then(response => {
           this.posts = response.data
           this.loadingPosts = false
