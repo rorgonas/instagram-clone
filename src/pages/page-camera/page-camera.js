@@ -144,6 +144,12 @@ export default {
     },
     addPost() {
       this.$q.loading.show()
+      
+      let postCreated = this.$q.localStorage.getItem('postCreated')
+      if (this.$q.platform.is.android && !postCreated && !navigator.onLine) {
+        this.addPostError()
+        return
+      }
 
       //send post via form data
       let formData = new FormData()
@@ -155,6 +161,7 @@ export default {
 
       this.$axios.post(`${process.env.API}/createPost`, formData)
         .then(response => {
+          this.$q.localStorage.set('postCreated', true)
           this.$router.push('/');
           this.$q.notify({
             message: 'Post created!',
@@ -164,14 +171,11 @@ export default {
           })
         })
         .catch(err => {
-          if (!navigator.onLine && this.backgroundSyncSupported) {
+          if (!navigator.onLine && this.backgroundSyncSupported && postCreated) {
             this.$q.notify('Post created offline!')
             this.$router.push('/')
           } else {
-            this.$q.dialog({
-              title: 'Error',
-              message: 'Sorry, could not create post'
-            })
+            this.addPostError()
           }
         }).finally(() => {
           this.$q.loading.hide()
@@ -181,6 +185,12 @@ export default {
             }, 1000)
           }
         })
+    },
+    addPostError() {
+      this.$q.dialog({
+        title: 'Error',
+        message: 'Sorry, could not create post'
+      })
     }
   },
   mounted() {
