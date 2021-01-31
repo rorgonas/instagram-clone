@@ -149,6 +149,7 @@ export default {
       let postCreated = this.$q.localStorage.getItem('postCreated')
       if (this.$q.platform.is.android && !postCreated && !navigator.onLine) {
         this.addPostError()
+        this.$q.loading.hide()
         return
       }
 
