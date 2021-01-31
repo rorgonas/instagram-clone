@@ -58,23 +58,25 @@
           <template v-slot:append>
             <q-btn
               v-if="!locationLoading && locationSupported"
+              icon="eva-navigation-2-outline"
+              @click="getLocation"
               round
               dense
               flat
-              icon="eva-navigation-2-outline"
-              @click="getLocation"
             />
           </template>
         </q-input>
       </div>
       <div class="row justify-center q-mt-lg">
         <q-btn
-          unelevated
-          rounded
+          class="q-mb-lg"
           color="primary"
           label="Post Image"
           @click="addPost"
-          :disable="!post.caption || !post.photo"/>
+          :disable="!post.caption || !post.photo"
+          unelevated
+          rounded
+        />
       </div>
     </div>
   </q-page>
