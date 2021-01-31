@@ -9,6 +9,7 @@
         ref="video"
         class="full-width"
         autoplay
+        playsinline
       />
       <canvas
         v-show="imageCaptured"
