@@ -144,7 +144,8 @@ export default {
     },
     addPost() {
       this.$q.loading.show()
-      
+
+      // Android trigger background sync error if first post is not created online
       let postCreated = this.$q.localStorage.getItem('postCreated')
       if (this.$q.platform.is.android && !postCreated && !navigator.onLine) {
         this.addPostError()
