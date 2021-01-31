@@ -117,6 +117,7 @@ registerRoute(
 self.addEventListener('push', event => {
   console.log('Push message received:', event)
   if (event.data) {
+    // store push message content in data
     let data = JSON.parse(event.data.text())
     event.waitUntil(
       self.registration.showNotification(
@@ -124,6 +125,7 @@ self.addEventListener('push', event => {
         {
           body: data.body,
           icon: 'icons/icon-128x128.png',
+          image: data.imageUrl,
           data: {
             openUrl: data.openUrl
           }
